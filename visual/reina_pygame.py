@@ -25,12 +25,22 @@ class TableroReinasPygame:
                 pygame.draw.rect(self.pantalla, color, rect)
 
     def dibujar_reinas(self):
+        # Cargar la imagen de la reina solo una vez
+        if not hasattr(self, 'img_reina'):
+            try:
+                self.img_reina = pygame.image.load("visual/img/reina.png")
+                self.img_reina = pygame.transform.scale(self.img_reina, (TAM_CASILLA, TAM_CASILLA))
+            except Exception as e:
+                print("⚠️ No se pudo cargar la imagen de la reina:", e)
+                return
+
+        # Dibujar la reina en cada posición
         for col in range(self.cantidad_reinas):
             fila = self.tablero.posiciones[col]
-            centro_x = col * TAM_CASILLA + TAM_CASILLA // 2
-            centro_y = fila * TAM_CASILLA + TAM_CASILLA // 2
-            pygame.draw.circle(self.pantalla, self.RO, (centro_x, centro_y), TAM_CASILLA // 3)
-
+            x = col * TAM_CASILLA
+            y = fila * TAM_CASILLA
+            self.pantalla.blit(self.img_reina, (x, y))
+            
     def mostrar(self):
         running = True
         while running:
