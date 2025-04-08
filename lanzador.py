@@ -2,6 +2,7 @@ from caballo.caballo import Caballo
 from reina.tablero import Tablero
 from utils.consola import mostrar_movimientos_caballo, mostrar_solucion_reinas
 from visual.reina_pygame import TableroReinasPygame
+from visual.caballo_pygame import TecladoCaballoPygame
 
 def main():
     print("=== PROBLEMAS DE AJEDREZ ===")
@@ -10,7 +11,9 @@ def main():
     profundidad = int(input("\n👉 Ingrese la cantidad de movimientos del caballo: "))
     caballo = Caballo()
     mostrar_movimientos_caballo(caballo, profundidad)
-
+    visual_caballo = TecladoCaballoPygame(caballo, profundidad)
+    visual_caballo.mostrar()
+    
     # 👑 Problema de las N-Reinas
     cantidad_reinas = int(input("\n👉 Ingrese la cantidad de reinas: "))
     tam_tablero = int(input("📐 Ingrese el tamaño del tablero (n x n): "))
