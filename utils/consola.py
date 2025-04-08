@@ -3,10 +3,10 @@ def mostrar_movimientos_caballo(caballo, profundidad):
     print(f"\n🐴 Movimientos válidos del caballo con {profundidad} movimiento(s): {total}")
 
 
-def mostrar_solucion_reinas(tablero):
-    if tablero.resolver():
-        print(f"\n👑 Solución para {tablero.n} reinas:")
-        for col, fila in enumerate(tablero.posiciones):
-            print(f" - Columna {col}: Fila {fila}")
+def mostrar_solucion_reinas(tablero, cantidad_reinas):
+    if tablero.resolver(cantidad_reinas):
+        print(f"\n👑 Solución para colocar {cantidad_reinas} reinas en un tablero de {tablero.n}x{tablero.n}:")
+        for col, fila in enumerate(tablero.posiciones[:cantidad_reinas]):
+            print(f" - Reina en Columna {col}: Fila {fila}")
     else:
-        print(f"\n❌ No hay solución para {tablero.n} reinas.")
+        print(f"\n❌ No se encontró solución para {cantidad_reinas} reinas en un tablero de {tablero.n}x{tablero.n}.")
