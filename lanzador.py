@@ -11,6 +11,11 @@ def main():
     mostrar_movimientos_caballo(caballo, profundidad)
 
     # 👑 Problema de las N-Reinas
-    n = int(input("\n👉 Ingrese el número de reinas (y tamaño del tablero): "))
-    tablero = Tablero(n)
-    mostrar_solucion_reinas(tablero)
+    cantidad_reinas = int(input("\n👉 Ingrese la cantidad de reinas: "))
+    tam_tablero = int(input("📐 Ingrese el tamaño del tablero (n x n): "))
+
+    if cantidad_reinas > tam_tablero:
+        print("\n⚠️ Advertencia: No es posible colocar más reinas que columnas. No hay solución.")
+        return
+    tablero = Tablero(tam_tablero)
+    mostrar_solucion_reinas(tablero, cantidad_reinas)
