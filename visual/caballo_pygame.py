@@ -15,29 +15,43 @@ class TecladoCaballoPygame:
     def __init__(self, caballo, profundidad):
         self.caballo = caballo
         self.profundidad = profundidad
+        self.desde = 1  # Número desde el cual mostrar los destinos
         self.BL, self.NE, self.RO = obtener_colores()
         self.ancho = TAM_CASILLA * 3
         self.alto = TAM_CASILLA * 4 + 40  # espacio adicional para el texto
 
         pygame.init()
         pygame.font.init()
+
         self.pantalla = pygame.display.set_mode((self.ancho, self.alto))
         pygame.display.set_caption(f"Movimientos válidos del caballo con {profundidad} paso(s)")
+
+        # Truco para que la ventana aparezca al frente en macOS
+        pygame.display.set_mode((self.ancho + 1, self.alto + 1))
+        pygame.display.set_mode((self.ancho, self.alto))
+
         self.fuente = pygame.font.Font(None, 40)
         assert self.fuente is not None, "⚠️ No se cargó la fuente correctamente"
         self.reloj = pygame.time.Clock()
 
-    def dibujar_teclado(self):
+    def dibujar_teclado(self, destinos=[]):
         for numero, (col, fila) in POSICIONES_TECLADO.items():
             x = col * TAM_CASILLA
             y = fila * TAM_CASILLA
             rect = pygame.Rect(x, y, TAM_CASILLA, TAM_CASILLA)
-            pygame.draw.rect(self.pantalla, self.NE, rect, width=2)
+
+            if numero in destinos:
+                pygame.draw.rect(self.pantalla, self.RO, rect)  # fondo rojo para destinos
+            else:
+                pygame.draw.rect(self.pantalla, self.NE, rect, width=2)
+
             texto = self.fuente.render(str(numero), True, self.NE)
             self.pantalla.blit(texto, (x + TAM_CASILLA // 3, y + TAM_CASILLA // 3))
 
     def mostrar(self):
         total = self.caballo.movimientos_totales(self.profundidad)
+        destinos_validos = self.caballo.teclado.movimientos_validos(self.desde)
+
         running = True
         while running:
             for evento in pygame.event.get():
@@ -45,12 +59,10 @@ class TecladoCaballoPygame:
                     running = False
 
             self.pantalla.fill(self.BL)
-            self.dibujar_teclado()
+            self.dibujar_teclado(destinos_validos)
 
-            # Fondo blanco para evitar superposición con el 0
+            # Fondo para el texto
             pygame.draw.rect(self.pantalla, self.BL, (0, TAM_CASILLA * 4, self.ancho, 40))
-
-            # Mostrar el total en pantalla
             texto = self.fuente.render(f"Total: {total}", True, self.RO)
             self.pantalla.blit(texto, (10, TAM_CASILLA * 4 + 5))
 
