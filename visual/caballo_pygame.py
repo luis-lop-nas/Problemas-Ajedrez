@@ -15,10 +15,10 @@ class TecladoCaballoPygame:
     def __init__(self, caballo, profundidad):
         self.caballo = caballo
         self.profundidad = profundidad
-        self.desde = 1  # Número desde el cual mostrar los destinos
+        self.desde = 1  # Punto de partida del caballo
         self.BL, self.NE, self.RO = obtener_colores()
         self.ancho = TAM_CASILLA * 3
-        self.alto = TAM_CASILLA * 4 + 40  # espacio adicional para el texto
+        self.alto = TAM_CASILLA * 4 + 40  # espacio para el texto
 
         pygame.init()
         pygame.font.init()
@@ -33,6 +33,14 @@ class TecladoCaballoPygame:
         self.fuente = pygame.font.Font(None, 40)
         assert self.fuente is not None, "⚠️ No se cargó la fuente correctamente"
         self.reloj = pygame.time.Clock()
+
+    def detectar_numero_click(self, pos_mouse):
+        x, y = pos_mouse
+        for numero, (col, fila) in POSICIONES_TECLADO.items():
+            rect = pygame.Rect(col * TAM_CASILLA, fila * TAM_CASILLA, TAM_CASILLA, TAM_CASILLA)
+            if rect.collidepoint(x, y):
+                return numero
+        return None
 
     def dibujar_teclado(self, destinos=[]):
         for numero, (col, fila) in POSICIONES_TECLADO.items():
@@ -50,18 +58,23 @@ class TecladoCaballoPygame:
 
     def mostrar(self):
         total = self.caballo.movimientos_totales(self.profundidad)
-        destinos_validos = self.caballo.teclado.movimientos_validos(self.desde)
-
         running = True
+
         while running:
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     running = False
+                elif evento.type == pygame.MOUSEBUTTONDOWN:
+                    numero_clic = self.detectar_numero_click(evento.pos)
+                    if numero_clic is not None:
+                        self.desde = numero_clic
+
+            destinos_validos = self.caballo.teclado.movimientos_validos(self.desde)
 
             self.pantalla.fill(self.BL)
             self.dibujar_teclado(destinos_validos)
 
-            # Fondo para el texto
+            # Fondo y texto con el total
             pygame.draw.rect(self.pantalla, self.BL, (0, TAM_CASILLA * 4, self.ancho, 40))
             texto = self.fuente.render(f"Total: {total}", True, self.RO)
             self.pantalla.blit(texto, (10, TAM_CASILLA * 4 + 5))
