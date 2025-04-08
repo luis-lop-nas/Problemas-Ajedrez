@@ -1,6 +1,7 @@
 from caballo.caballo import Caballo
 from reina.tablero import Tablero
 from utils.consola import mostrar_movimientos_caballo, mostrar_solucion_reinas
+from visual.reina_pygame import TableroReinasPygame
 
 def main():
     print("=== PROBLEMAS DE AJEDREZ ===")
@@ -19,3 +20,7 @@ def main():
         return
     tablero = Tablero(tam_tablero)
     mostrar_solucion_reinas(tablero, cantidad_reinas)
+    
+    # Mostrar visualización en Pygame
+    visual = TableroReinasPygame(tablero, cantidad_reinas)
+    visual.mostrar()
