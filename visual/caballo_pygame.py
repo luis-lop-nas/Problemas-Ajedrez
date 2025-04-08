@@ -17,12 +17,14 @@ class TecladoCaballoPygame:
         self.profundidad = profundidad
         self.BL, self.NE, self.RO = obtener_colores()
         self.ancho = TAM_CASILLA * 3
-        self.alto = TAM_CASILLA * 4 + 40 # espacio para el texto
+        self.alto = TAM_CASILLA * 4 + 40  # espacio adicional para el texto
 
         pygame.init()
+        pygame.font.init()
         self.pantalla = pygame.display.set_mode((self.ancho, self.alto))
         pygame.display.set_caption(f"Movimientos válidos del caballo con {profundidad} paso(s)")
-        self.fuente = pygame.font.SysFont(None, 40)
+        self.fuente = pygame.font.Font(None, 40)
+        assert self.fuente is not None, "⚠️ No se cargó la fuente correctamente"
         self.reloj = pygame.time.Clock()
 
     def dibujar_teclado(self):
@@ -45,9 +47,12 @@ class TecladoCaballoPygame:
             self.pantalla.fill(self.BL)
             self.dibujar_teclado()
 
+            # Fondo blanco para evitar superposición con el 0
+            pygame.draw.rect(self.pantalla, self.BL, (0, TAM_CASILLA * 4, self.ancho, 40))
+
             # Mostrar el total en pantalla
             texto = self.fuente.render(f"Total: {total}", True, self.RO)
-            self.pantalla.blit(texto, (10, self.alto + 10))  # fuera del área del teclado
+            self.pantalla.blit(texto, (10, TAM_CASILLA * 4 + 5))
 
             pygame.display.flip()
             self.reloj.tick(60)
