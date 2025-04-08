@@ -47,7 +47,7 @@ class TecladoCaballoPygame:
 
             # Mostrar el total en pantalla
             texto = self.fuente.render(f"Total: {total}", True, self.RO)
-            self.pantalla.blit(texto, (10, self.alto - 40))
+            self.pantalla.blit(texto, (10, self.alto + 10))  # fuera del área del teclado
 
             pygame.display.flip()
             self.reloj.tick(60)
