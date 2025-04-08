@@ -17,7 +17,7 @@ class TecladoCaballoPygame:
         self.profundidad = profundidad
         self.BL, self.NE, self.RO = obtener_colores()
         self.ancho = TAM_CASILLA * 3
-        self.alto = TAM_CASILLA * 4
+        self.alto = TAM_CASILLA * 4 + 40 # espacio para el texto
 
         pygame.init()
         self.pantalla = pygame.display.set_mode((self.ancho, self.alto))
