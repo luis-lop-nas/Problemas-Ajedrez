@@ -13,8 +13,17 @@ class TableroReinasPygame:
         self.BL, self.NE, self.RO = obtener_colores()
 
         pygame.init()
+        pygame.font.init()
+
         self.pantalla = pygame.display.set_mode((self.ancho, self.alto))
         pygame.display.set_caption(f"Reinas en tablero {self.n}x{self.n}")
+
+        # 🪄 Truco para que la ventana aparezca al frente en macOS
+        pygame.display.set_mode((self.ancho + 1, self.alto + 1))
+        pygame.display.set_mode((self.ancho, self.alto))
+
+        self.fuente = pygame.font.Font(None, 40)
+        assert self.fuente is not None, "⚠️ No se cargó la fuente correctamente"
         self.reloj = pygame.time.Clock()
 
     def dibujar_tablero(self):
@@ -25,7 +34,6 @@ class TableroReinasPygame:
                 pygame.draw.rect(self.pantalla, color, rect)
 
     def dibujar_reinas(self):
-        # Cargar la imagen de la reina solo una vez
         if not hasattr(self, 'img_reina'):
             try:
                 self.img_reina = pygame.image.load("visual/img/reina.png")
@@ -34,13 +42,12 @@ class TableroReinasPygame:
                 print("⚠️ No se pudo cargar la imagen de la reina:", e)
                 return
 
-        # Dibujar la reina en cada posición
         for col in range(self.cantidad_reinas):
             fila = self.tablero.posiciones[col]
             x = col * TAM_CASILLA
             y = fila * TAM_CASILLA
             self.pantalla.blit(self.img_reina, (x, y))
-            
+
     def mostrar(self):
         running = True
         while running:
